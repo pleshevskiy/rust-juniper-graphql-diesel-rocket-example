@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  postgresql:
+    image: postgres:9.6-alpine
+    ports:
+      - 5532:5432
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: test
+      POSTGRES_DB: test
