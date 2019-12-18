@@ -1,4 +1,4 @@
-use juniper::FieldResult;
+use juniper::{FieldResult, FieldError};
 
 use crate::graphql::Context;
 use crate::db::enums::Episode;
@@ -16,8 +16,9 @@ pub struct HeroObject {
     pub home_planet: String,
 }
 
-impl HeroObject {
-    fn from_model(hero: &models::Hero) -> Self {
+
+impl From<Hero> for HeroObject {
+    fn from(hero: Hero) -> Self {
         HeroObject {
             id: hero.id.to_string(),
             name: hero.name.clone(),
@@ -25,14 +26,7 @@ impl HeroObject {
             home_planet: hero.home_planet.clone(),
         }
     }
-
-    fn from_models(heroes: Vec<models::Hero>) -> Vec<Self> {
-        heroes.iter()
-            .map(|hero| HeroObject::from_model(hero))
-            .collect()
-    }
 }
-
 
 
 #[derive(Debug, GraphQLInputObject)]
@@ -43,31 +37,31 @@ pub struct NewHeroInput {
     pub home_planet: String,
 }
 
-impl NewHeroInput {
-    fn to_model(&self) -> NewHero {
-        NewHero {
-            name: self.name.clone(),
-            home_planet: self.home_planet.clone(),
-            appears_in: self.appears_in.clone(),
-        }
-    }
-}
-
 
 impl Context {
     pub fn get_hero(&self, id: &str) -> FieldResult<HeroObject> {
         let id: i32 = id.parse()?;
         let hero = models::Hero::get_hero(id, &self.connection)?;
-        Ok(HeroObject::from_model(&hero))
+        Ok(hero.into())
     }
 
     pub fn all_heroes(&self) -> FieldResult<Vec<HeroObject>> {
         let heroes = models::Hero::get_all_heroes(&self.connection)?;
-        Ok(HeroObject::from_models(heroes))
+        let hero_objects = heroes.iter()
+            .map(|hero| HeroObject::from(hero.clone()))
+            .collect();
+        Ok(hero_objects)
     }
 
-    pub fn add_hero(&self, new_hero: NewHeroInput) -> FieldResult<HeroObject> {
-        let hero = Hero::create(new_hero.to_model(), &self.connection)?;
-        Ok(HeroObject::from_model(&hero))
+    pub fn add_hero(&self, input: NewHeroInput) -> FieldResult<HeroObject> {
+        let new_hero = NewHero {
+            name: input.name.clone(),
+            appears_in: input.appears_in.clone(),
+            home_planet: input.home_planet.clone(),
+        };
+
+        let hero = Hero::create(new_hero, &self.connection)
+            .map_err(|_| FieldError::from("Cannot create hero"))?;
+        Ok(hero.into())
     }
 }
