@@ -2,9 +2,12 @@
 #![recursion_limit = "1024"]
 
 extern crate dotenv;
-#[macro_use] extern crate juniper;
-#[macro_use] extern crate diesel;
-#[macro_use] extern crate diesel_derive_enum;
+#[macro_use]
+extern crate juniper;
+#[macro_use]
+extern crate diesel;
+#[macro_use]
+extern crate diesel_derive_enum;
 
 use dotenv::dotenv;
 use rocket::response::content;
@@ -13,9 +16,8 @@ use rocket::State;
 mod db;
 mod graphql;
 
-use crate::graphql::{Schema, create_schema, Context};
 use crate::db::Connection;
-
+use crate::graphql::{create_schema, Context, Schema};
 
 #[rocket::get("/")]
 fn graphiql() -> content::Html<String> {
@@ -28,9 +30,7 @@ fn get_graphql_handler(
     schema: State<Schema>,
     db: Connection,
 ) -> juniper_rocket::GraphQLResponse {
-    request.execute(&schema, &Context {
-        connection: db
-    })
+    request.execute(&schema, &Context { connection: db })
 }
 
 #[rocket::post("/graphql", data = "<request>")]
@@ -39,9 +39,7 @@ fn post_graphql_handler(
     schema: State<Schema>,
     db: Connection,
 ) -> juniper_rocket::GraphQLResponse {
-    request.execute(&schema, &Context {
-        connection: db
-    })
+    request.execute(&schema, &Context { connection: db })
 }
 
 fn main() {
@@ -52,7 +50,11 @@ fn main() {
         .manage(create_schema())
         .mount(
             "/",
-            rocket::routes![graphiql, get_graphql_handler, post_graphql_handler],
+            rocket::routes![
+                graphiql,
+                get_graphql_handler,
+                post_graphql_handler
+            ],
         )
         .launch();
 }

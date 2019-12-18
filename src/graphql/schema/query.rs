@@ -1,8 +1,7 @@
 use juniper::FieldResult;
 
-use crate::graphql::Context;
 use crate::graphql::schema::HeroObject;
-
+use crate::graphql::Context;
 
 #[derive(Debug)]
 pub struct Query {}

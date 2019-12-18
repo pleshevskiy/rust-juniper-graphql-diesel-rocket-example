@@ -1,6 +1,5 @@
-pub mod schema;
 mod context;
+pub mod schema;
 
-pub use schema::{Schema, create_schema};
 pub use context::Context;
-
+pub use schema::{create_schema, Schema};

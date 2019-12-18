@@ -1,6 +1,5 @@
 use crate::db::Connection;
 
-
 pub struct Context {
     pub connection: Connection,
 }
