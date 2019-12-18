@@ -5,26 +5,32 @@ use diesel::PgConnection;
 pub use crate::db::schema::heroes;
 use crate::db::enums::Episode;
 
-#[derive(AsChangeset, Insertable, Queryable, Identifiable, Debug, Clone, PartialEq)]
+#[derive(AsChangeset, Queryable, Identifiable, Debug, Clone, PartialEq)]
 #[table_name = "heroes"]
 pub struct Hero {
-    pub id: Option<i32>,
+    pub id: i32,
     pub name: String,
     pub appears_in: Vec<Episode>,
     pub home_planet: String,
 }
 
 
-impl Hero {
-    pub fn create(hero: Hero, connection: &PgConnection) -> QueryResult<Hero> {
-        diesel::insert_into(heroes::table)
-            .values(&hero)
-            .execute(connection)
-            .expect("Error creating new hero");
 
-        heroes::table
-            .order(heroes::id.desc())
-            .first(connection)
+#[derive(Debug, Insertable)]
+#[table_name = "heroes"]
+pub struct NewHero {
+    pub name: String,
+    pub appears_in: Vec<Episode>,
+    pub home_planet: String,
+}
+
+
+
+impl Hero {
+    pub fn create(new_hero: NewHero, connection: &PgConnection) -> QueryResult<Hero> {
+        diesel::insert_into(heroes::table)
+            .values(&new_hero)
+            .get_result(connection)
     }
 
     pub fn get_hero(id: i32, connection: &PgConnection) -> QueryResult<Hero> {
