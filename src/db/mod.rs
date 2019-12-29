@@ -3,8 +3,8 @@ use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
 use rocket::http::Status;
 use rocket::request::{self, FromRequest};
 use rocket::{Outcome, Request, State};
-use std::env;
 use std::ops::Deref;
+use super::cfg;
 
 pub mod enums;
 pub mod models;

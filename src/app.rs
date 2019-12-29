@@ -8,8 +8,8 @@ use super::cfg;
 
 #[rocket::get("/")]
 fn graphiql() -> content::Html<String> {
-    let graphql_endpoint_url = concat!(cfg::ROCKET::BASE_URL().as_str(), "/graphql");
-    juniper_rocket::graphiql_source(graphql_endpoint_url)
+    let graphql_endpoint_url = cfg::ROCKET::BASE_URL() + "/graphql";
+    juniper_rocket::graphiql_source(&graphql_endpoint_url)
 }
 
 #[rocket::get("/graphql?<request>")]
