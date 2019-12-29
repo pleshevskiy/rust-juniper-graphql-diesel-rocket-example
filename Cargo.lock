@@ -246,6 +246,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "itconfig"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "19aeda0976e8e4b1b6ef1650d7dc85e93244aaf39a3ec96a18656aa748b40035"
+
+[[package]]
 name = "itoa"
 version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -274,6 +280,7 @@ dependencies = [
  "diesel",
  "diesel-derive-enum",
  "dotenv",
+ "itconfig",
  "juniper",
  "juniper_rocket",
  "rocket",
