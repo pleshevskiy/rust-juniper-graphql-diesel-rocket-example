@@ -27,7 +27,7 @@ cargo install diesel_cli
 Run example database and run migrations using
 
 ```bash
-docker-compose -f docker-compose.example.yml
+docker-compose -f docker-compose.example.yml up
 diesel migrations run
 ```
 
