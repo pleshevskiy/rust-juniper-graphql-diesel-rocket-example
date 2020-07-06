@@ -28,7 +28,7 @@ Run example database and run migrations using
 
 ```bash
 docker-compose -f docker-compose.example.yml up
-diesel migrations run
+diesel migration run
 ```
 
 Lastly, you can run the server using
