@@ -1,10 +1,10 @@
+use super::config;
 use diesel::pg::PgConnection;
 use diesel::r2d2::{ConnectionManager, Pool, PooledConnection};
 use rocket::http::Status;
 use rocket::request::{self, FromRequest};
 use rocket::{Outcome, Request, State};
 use std::ops::Deref;
-use super::config;
 
 pub mod enums;
 pub mod models;
@@ -13,7 +13,8 @@ pub mod schema;
 pub type PgPool = Pool<ConnectionManager<PgConnection>>;
 
 pub fn connect() -> PgPool {
-    let manager = ConnectionManager::<PgConnection>::new(config::DATABASE_URL());
+    let manager =
+        ConnectionManager::<PgConnection>::new(config::DATABASE_URL());
     Pool::new(manager).expect("Failed to create pool")
 }
 

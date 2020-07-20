@@ -1,10 +1,9 @@
+use crate::config;
+use crate::db;
 use crate::db::Connection;
 use crate::graphql::{create_schema, Context, Schema};
 use rocket::response::content;
-use rocket::{State, Rocket};
-use crate::db;
-use crate::config;
-
+use rocket::{Rocket, State};
 
 #[rocket::get("/")]
 fn graphiql() -> content::Html<String> {
@@ -30,17 +29,9 @@ fn post_graphql_handler(
     request.execute(&schema, &Context { connection: db })
 }
 
-
 pub fn init() -> Rocket {
-    rocket::ignite()
-        .manage(db::connect())
-        .manage(create_schema())
-        .mount(
-            &config::ROCKET::BASE_URL(),
-            rocket::routes![
-                graphiql,
-                get_graphql_handler,
-                post_graphql_handler
-            ],
-        )
+    rocket::ignite().manage(db::connect()).manage(create_schema()).mount(
+        &config::ROCKET::BASE_URL(),
+        rocket::routes![graphiql, get_graphql_handler, post_graphql_handler],
+    )
 }
