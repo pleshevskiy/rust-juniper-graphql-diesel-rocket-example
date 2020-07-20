@@ -8,9 +8,10 @@ edition = "2018"
 
 [dependencies]
 dotenv = "0.15.0"
-itconfig = "0.5.1"
+itconfig = { version = "1", features = ["macro"] }
 rocket = "0.4.2"
 diesel = { version = "1.4.3", features = ["postgres", "r2d2"] }
 diesel-derive-enum = { version = "0.4", features = ["postgres"] }
 juniper = "0.14.1"
 juniper_rocket = "0.5.1"
+lazy_static = "1.4.0"

@@ -4,7 +4,7 @@ use rocket::http::Status;
 use rocket::request::{self, FromRequest};
 use rocket::{Outcome, Request, State};
 use std::ops::Deref;
-use super::cfg;
+use super::config;
 
 pub mod enums;
 pub mod models;
@@ -13,7 +13,7 @@ pub mod schema;
 pub type PgPool = Pool<ConnectionManager<PgConnection>>;
 
 pub fn connect() -> PgPool {
-    let manager = ConnectionManager::<PgConnection>::new(cfg::DATABASE_URL());
+    let manager = ConnectionManager::<PgConnection>::new(config::DATABASE_URL());
     Pool::new(manager).expect("Failed to create pool")
 }
 

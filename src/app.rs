@@ -3,12 +3,12 @@ use crate::graphql::{create_schema, Context, Schema};
 use rocket::response::content;
 use rocket::{State, Rocket};
 use crate::db;
-use super::cfg;
+use crate::config;
 
 
 #[rocket::get("/")]
 fn graphiql() -> content::Html<String> {
-    let graphql_endpoint_url = cfg::ROCKET::BASE_URL() + "/graphql";
+    let graphql_endpoint_url = config::ROCKET::BASE_URL() + "/graphql";
     juniper_rocket::graphiql_source(&graphql_endpoint_url)
 }
 
@@ -36,7 +36,7 @@ pub fn init() -> Rocket {
         .manage(db::connect())
         .manage(create_schema())
         .mount(
-            &cfg::ROCKET::BASE_URL(),
+            &config::ROCKET::BASE_URL(),
             rocket::routes![
                 graphiql,
                 get_graphql_handler,
