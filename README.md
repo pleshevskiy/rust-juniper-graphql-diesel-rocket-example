@@ -18,17 +18,17 @@ or per project basis
 rustup override set nightly
 ```
 
-Need to install diesel-cli for database managing
+Need to install diesel_cli for database managing
 
 ```bash
-cargo install diesel-cli
+cargo install diesel_cli
 ```
 
 Run example database and run migrations using
 
 ```bash
 docker-compose -f docker-compose.example.yml
-diesel migrations run
+diesel migration run
 ```
 
 Lastly, you can run the server using
